@@ -3,6 +3,8 @@ using AmbientSounds.Factories;
 using AmbientSounds.Services;
 using AmbientSounds.Services.Uwp;
 using AmbientSounds.ViewModels;
+using JeniusApps.Common.Tools;
+using JeniusApps.Common.Tools.Uwp;
 using Microsoft.AppCenter;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Identity.Client.Extensibility;
@@ -327,6 +329,7 @@ namespace AmbientSounds
                 .AddSingleton<IUserSettings, LocalSettings>()
                 .AddSingleton<IShareLinkBuilder, ShareLinkBuilder>()
                 .AddSingleton<ISoundMixService, SoundMixService>()
+                .AddSingleton<ILocalizer, ReswLocalizer>()
                 .AddSingleton<IRenamer, Renamer>()
                 .AddSingleton<ILinkProcessor, LinkProcessor>()
                 .AddSingleton<IFileWriter, FileWriter>()

@@ -36,7 +36,7 @@ namespace AmbientSounds.Views
         protected override void OnNavigatedTo(NavigationEventArgs e)
         {
             var navigator = App.Services.GetRequiredService<INavigator>();
-            navigator.Frame = MainFrame;
+            navigator.ContentFrame = MainFrame;
 
             MainFrame.Navigate(typeof(MainPage));
         }
@@ -59,6 +59,15 @@ namespace AmbientSounds.Views
                 UserSettingsConstants.RatingDismissed,
                 DateTime.UtcNow);
             App.Services.GetRequiredService<ITelemetry>().TrackEvent(TelemetryConstants.OobeRateUsDismissed);
+        }
+
+        private void MenuItemClicked(object sender, Windows.UI.Xaml.RoutedEventArgs e)
+        {
+            // TODO re-enable once we add states back in 
+            //if (LeftPaneStates.CurrentState != LeftPaneOpen)
+            //{
+            //    MainSplitView.IsPaneOpen = false;
+            //}
         }
     }
 }

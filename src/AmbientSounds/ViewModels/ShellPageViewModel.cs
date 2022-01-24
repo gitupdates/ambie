@@ -1,8 +1,12 @@
 ﻿using AmbientSounds.Constants;
 using AmbientSounds.Services;
+using JeniusApps.Common.Models;
+using JeniusApps.Common.Tools;
 using Microsoft.Toolkit.Diagnostics;
 using Microsoft.Toolkit.Mvvm.ComponentModel;
+using Microsoft.Toolkit.Mvvm.Input;
 using System;
+using System.Collections.Generic;
 
 namespace AmbientSounds.ViewModels
 {
@@ -14,21 +18,26 @@ namespace AmbientSounds.ViewModels
         private readonly IUserSettings _userSettings;
         private readonly ITimerService _ratingTimer;
         private readonly ITelemetry _telemetry;
+        private readonly INavigator _navigator;
         private bool _isRatingMessageVisible;
 
         public ShellPageViewModel(
             IUserSettings userSettings,
             ITimerService timer,
             ITelemetry telemetry,
+            INavigator navigator,
+            ILocalizer localizer,
             ISystemInfoProvider systemInfoProvider)
         {
             Guard.IsNotNull(userSettings, nameof(userSettings));
             Guard.IsNotNull(timer, nameof(timer));
             Guard.IsNotNull(telemetry, nameof(telemetry));
+            Guard.IsNotNull(navigator, nameof(navigator));
 
             _userSettings = userSettings;
             _ratingTimer = timer;
             _telemetry = telemetry;
+            _navigator = navigator;
 
             _userSettings.SettingSet += OnSettingSet;
 
@@ -42,7 +51,28 @@ namespace AmbientSounds.ViewModels
                 _ratingTimer.IntervalElapsed += OnIntervalLapsed;
                 _ratingTimer.Start();
             }
+
+            MenuItemClickedCommand = new RelayCommand<MenuItem>(OnMenuItemClicked);
+            MenuItems.Add(new MenuItem(MenuItemClickedCommand, localizer.GetString("Home"), "\uEA80", UIConstants.HomePageKey));
+            MenuItems.Add(new MenuItem(MenuItemClickedCommand, localizer.GetString("Catalogue"), "\uE912", UIConstants.CataloguePageKey));
         }
+
+        private void OnMenuItemClicked(MenuItem? menuItem)
+        {
+            if (menuItem is null)
+            {
+                return;
+            }
+
+            _navigator.ContentNavigate(menuItem.Tag ?? string.Empty);
+        }
+
+        private RelayCommand<MenuItem> MenuItemClickedCommand { get; }
+
+        /// <summary>
+        /// List of menu items. 
+        /// </summary>
+        public List<MenuItem> MenuItems = new();
 
         /// <summary>
         /// Determines if the rating message is visible.

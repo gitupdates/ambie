@@ -1,4 +1,6 @@
-﻿namespace AmbientSounds.Services
+﻿using AmbientSounds.Constants;
+
+namespace AmbientSounds.Services
 {
     /// <summary>
     /// Allows programmatic page navigation.
@@ -14,7 +16,14 @@
         /// The inner frame that can navigate. This must be set before
         /// any method is called.
         /// </summary>
-        object? Frame { get; set; }
+        object? ContentFrame { get; set; }
+
+        /// <summary>
+        /// Navigates to the given page.
+        /// </summary>
+        /// <param name="pageKey">A page key from <see cref="UIConstants"/>.</param>
+        /// <param name="parameters">Parameters to pass to the navigation.</param>
+        void ContentNavigate(string pageKey, object? parameters = null);
 
         /// <summary>
         /// Navigates to the screensaver.

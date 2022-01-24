@@ -1,4 +1,5 @@
-﻿using AmbientSounds.Views;
+﻿using AmbientSounds.Constants;
+using AmbientSounds.Views;
 using System;
 using Windows.UI.ViewManagement;
 using Windows.UI.Xaml.Controls;
@@ -16,7 +17,21 @@ namespace AmbientSounds.Services.Uwp
         public object? RootFrame { get; set; }
 
         /// <inheritdoc/>
-        public object? Frame { get; set; }
+        public object? ContentFrame { get; set; }
+
+        /// <inheritdoc/>
+        public void ContentNavigate(string pageKey, object? parameters = null)
+        {
+            switch (pageKey)
+            {
+                case UIConstants.HomePageKey:
+                    ToHome();
+                    break;
+                case UIConstants.CataloguePageKey:
+                    ToCatalogue();
+                    break;
+            }
+        }
 
         /// <inheritdoc/>
         public void GoBack(string? sourcePage = null)
@@ -28,7 +43,7 @@ namespace AmbientSounds.Services.Uwp
                     GoBackSafely(RootFrame, new SuppressNavigationTransitionInfo());
                     break;
                 default:
-                    GoBackSafely(Frame);
+                    GoBackSafely(ContentFrame);
                     break;
             }
         }
@@ -53,16 +68,24 @@ namespace AmbientSounds.Services.Uwp
         /// <inheritdoc/>
         public void ToCatalogue()
         {
-            if (Frame is Frame f)
+            if (ContentFrame is Frame f && f.CurrentSourcePageType != typeof(CataloguePage))
             {
                 f.Navigate(typeof(CataloguePage), null, new SuppressNavigationTransitionInfo());
+            }
+        }
+
+        public void ToHome()
+        {
+            if (ContentFrame is Frame f && f.CurrentSourcePageType != typeof(MainPage))
+            {
+                f.Navigate(typeof(MainPage), null, new SuppressNavigationTransitionInfo());
             }
         }
 
         /// <inheritdoc/>
         public async void ToCompact()
         {
-            if (Frame is Frame f)
+            if (ContentFrame is Frame f)
             {
                 // Ref: https://programmer.group/uwp-use-compact-overlay-mode-to-always-display-on-the-front-end.html
                 var preferences = ViewModePreferences.CreateDefault(ApplicationViewMode.CompactOverlay);
@@ -75,7 +98,7 @@ namespace AmbientSounds.Services.Uwp
         /// <inheritdoc/>
         public void ToUploadPage()
         {
-            if (Frame is Frame f)
+            if (ContentFrame is Frame f)
             {
                 f.Navigate(typeof(UploadPage), null, new DrillInNavigationTransitionInfo());
             }

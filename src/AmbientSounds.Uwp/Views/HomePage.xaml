@@ -55,7 +55,7 @@
                         <Setter Target="SoundGallery.ItemTemplate" Value="{StaticResource MainPageSoundTemplate}" />
                         <Setter Target="SoundGallery.Layout" Value="{StaticResource UniformLayout}" />
                         <Setter Target="SoundGallery.Margin" Value="0,0,0,0" />
-                        <Setter Target="SoundGallery.InnerMargin" Value="8,0,40,32" />
+                        <Setter Target="SoundGallery.InnerMargin" Value="32,0,40,32" />
                     </VisualState.Setters>
                 </VisualState>
             </VisualStateGroup>

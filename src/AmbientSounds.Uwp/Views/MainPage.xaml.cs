@@ -22,13 +22,10 @@ namespace AmbientSounds.Views
     /// </summary>
     public sealed partial class MainPage : Page
     {
-        private readonly IUserSettings _userSettings;
-
         public MainPage()
         {
             this.InitializeComponent();
             this.DataContext = App.Services.GetRequiredService<MainPageViewModel>();
-            _userSettings = App.Services.GetRequiredService<IUserSettings>();
         }
 
         public bool IsNotTenFoot => !App.IsTenFoot;
@@ -37,8 +34,6 @@ namespace AmbientSounds.Views
 
         protected override async void OnNavigatedTo(NavigationEventArgs e)
         {
-            UpdateBackgroundState();
-            _userSettings.SettingSet += OnSettingSet;
             ViewModel.Initialize();
             ViewModel.StartTimer();
 
@@ -52,26 +47,8 @@ namespace AmbientSounds.Views
 
         protected override void OnNavigatedFrom(NavigationEventArgs e)
         {
-            _userSettings.SettingSet -= OnSettingSet;
             ViewModel.StopTimer();
             ViewModel.Dispose();
-        }
-
-        private void OnSettingSet(object sender, string settingKey)
-        {
-            if (settingKey == UserSettingsConstants.BackgroundImage)
-            {
-                UpdateBackgroundState();
-            }
-        }
-
-        private void UpdateBackgroundState()
-        {
-            bool backgroundImageActive = !string.IsNullOrEmpty(_userSettings.Get<string>(UserSettingsConstants.BackgroundImage));
-            VisualStateManager.GoToState(
-                this,
-                backgroundImageActive ? nameof(ImageBackgroundState) : nameof(RegularBackgroundState),
-                false);
         }
 
         private void TryStartPageAnimations()

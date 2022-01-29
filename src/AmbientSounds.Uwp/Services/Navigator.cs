@@ -76,9 +76,9 @@ namespace AmbientSounds.Services.Uwp
 
         public void ToHome()
         {
-            if (ContentFrame is Frame f && f.CurrentSourcePageType != typeof(MainPage))
+            if (ContentFrame is Frame f && f.CurrentSourcePageType != typeof(HomePage))
             {
-                f.Navigate(typeof(MainPage), null, new SuppressNavigationTransitionInfo());
+                f.Navigate(typeof(HomePage), null, new SuppressNavigationTransitionInfo());
             }
         }
 
